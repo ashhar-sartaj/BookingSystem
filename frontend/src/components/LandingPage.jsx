@@ -25,7 +25,19 @@ function LandingPage() {
             }
             setEvents(res.data.message);
         } catch (err) {
-            console.error(err);
+            // console.error(err);
+            if (err.response) {
+                const statusCode = err.response.status;
+                const serverError = err.response.data.error;
+                if (statusCode === 500) {
+                    alert(`fetch events failed ${serverError}` )
+                } else {
+                    alert("Server Error: Please try again later.");
+                }
+            } else {
+                //if request hant been been made to the server.. so there would be an statusCode
+                alert("Could not connect to the server.");
+            }
         }
     };
 
@@ -62,11 +74,10 @@ function LandingPage() {
     // Create event
     const handleSubmit = async (e) => {
         e.preventDefault();
-       
         try {
             const response = await axios.post("http://localhost:5000/events", form);
             if (response.data.status === 'success') {
-                alert("Event created ✅");
+                alert("Event created ");
             }
             fetchEvents();
 
@@ -77,8 +88,20 @@ function LandingPage() {
                 total_capacity: ""
             });
         } catch (err) {
-            console.error(err);
-            alert("Error creating event");
+            // console.error(err);
+            if (err.response) {
+                const statusCode = err.response.status;
+                const serverError = err.response.data.error;
+                if (statusCode === 400) {
+                    alert(`failed inputs ${serverError}`)
+                } else if (statusCode === 500) {
+                    alert(`failed event creation ${serverError}`)
+                } else {
+                    alert("Server Error: Please try again later.");
+                }
+            } else {
+                alert("Could not connect to the server.");
+            }
         }
     };
     //booking button handling

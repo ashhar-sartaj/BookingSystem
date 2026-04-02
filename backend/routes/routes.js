@@ -102,7 +102,7 @@ router.get('/users/:id/bookings', async (req, res) => {
         if (!user || user.length === 0) {
             return res.status(404).json({
                 status: 'failed',
-                message: 'User not found'
+                error: 'User not found'
             });
         }
         const bookings = await userActions.mybookings(id);
@@ -154,7 +154,7 @@ router.get('/events/:id/details', async (req, res) => {
         if (!event) {
             return res.status(404).json({
                 status: 'failed',
-                message: 'No event exists with the provided id'
+                error: 'No event exists with the provided id'
             });
         }
         return res.status(200).json({

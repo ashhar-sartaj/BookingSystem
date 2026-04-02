@@ -23,9 +23,7 @@ function Booking() {
     //helper function to format the date backn to the local input. Will accept the utcstring..a dnconvert.
     const formatToLocal = (utcdatestring) =>{
         if (!utcdatestring) return "";
-
         const date = new Date(utcdatestring);
-
         // This offset converts the UTC time back to your local machine's time
         const offset = date.getTimezoneOffset() * 60000;
         const localISOTime = new Date(date.getTime() - offset).toISOString().slice(0, 16);
@@ -36,27 +34,59 @@ function Booking() {
     useEffect(() => {
         if (!form.event_id) return;
         const fetchEventDetails = async () => {
-            const response = await axios.get(`http://localhost:5000/events/${eventIdFromParams}/details`)
-            console.log(response)
-            const apiDate = response.data.message[0].date;
-            console.log( apiDate)
-            // 2. Format it to the local: using the helper function
-            const formattedDate = formatToLocal(apiDate)
-            setForm({
-                ...form,
-                date: formattedDate
-            })
+            try {
+                const response = await axios.get(`http://localhost:5000/events/${eventIdFromParams}/details`)
+                console.log(response)
+                const apiDate = response.data.message.date;
+                console.log(apiDate)
+                // 2. Format it to the local: using the helper function
+                const formattedDate = formatToLocal(apiDate)
+                setForm({
+                    ...form,
+                    date: formattedDate
+                })
+            } catch(err) {
+                if (err.response) {
+                    const statusCode = err.response.status;
+                    const serverError = err.response.data.error
+                    if (statusCode === 404) {
+                        alert(`No event exists with the provided id`)
+                    } else if (statusCode === 500) {
+                        alert(`Internal server error`)
+                    } else {
+                        alert("Server Error: Please try again later.");
+                    }
+                } else {
+                    alert("Could not connect to the server.");
+                }
+            }
+            
         }
         fetchEventDetails()
     }, [form.event_id])
     //useeffect to fetch all the avilable users to show their userIds
     useEffect(() => {
         const fetchUsers = async () => {
-            const response = await axios.get(`http://localhost:5000/users`)
-            if (response.data.message.length !== 0) {
-                setUsers(response.data.message)
+            try {
+                const response = await axios.get(`http://localhost:5000/users`)
+                if (response.data.message.length !== 0) {
+                    setUsers(response.data.message)
+                }
+                console.log(response)
+            } catch(err) {
+                if (err.response) {
+                    const errorCode = err.response.status;
+                    // const serverError = err.response.data.error;
+                    if (errorCode=== 500) {
+                        alert(`failed to fetch users`)
+                    } else {
+                        alert("Server Error: Please try again later.");
+                    }
+                } else {
+                    alert("Could not connect to the server.");
+                }
             }
-            console.log(response)
+
         }
         fetchUsers()
     },[])
@@ -73,12 +103,29 @@ function Booking() {
             const response = await axios.post('http://localhost:5000/bookings', form); //will get the booking code
             console.log(response.data.message);
             if (response.data.status === 'success') {
-                alert("Booking created ✅");
+                alert("Booking created");
                 setBookingCode(response.data.message);
             }
         } catch(err) {
-            console.error(err);
-            alert("Error in booking");
+            // console.error(err);
+            //check if the error.response exist or not
+            if (err.response) {
+                //get the status code
+                console.log(err.response)
+                const statusCode = err.response.status;
+                // const serverError = err.response.data.error; //will be our string from the backend error
+                if (statusCode === 400) {
+                    alert('Invalid request/input/invalid ticket counts')
+                } else if(statusCode === 404) {
+                    alert('User not exist/found')
+                } else {
+                    alert("Server Error: Please try again later.");
+                }
+            } else {
+                //case if the request hasnt been made to the server
+                alert("Could not connect to the server.");
+            }
+            
         }
         setForm({
             user_id: "",
@@ -88,21 +135,59 @@ function Booking() {
         })
     }
     const checkMyBookings = async () => {
-        if (!userId) return;
-        const response = await axios.get(`http://localhost:5000/users/${userId}/bookings`);
-        console.log('your bookings',response)
-        if (response.data.message.length === 0) {
-            setMessage('No bookings')
+        // if (!userId) return;
+        try {
+            const response = await axios.get(`http://localhost:5000/users/${userId}/bookings`);
+            console.log('your bookings', response)
+            if (response.data.message.length === 0) {
+                setMessage('No bookings')
+            }
+            setAllBookings(response.data.message);//it will be an empty array if no bookings
+        } catch(err) {
+            if (err.response) {
+                console.log(err.response)
+                const statusCode=err.response.status;
+                const serverError=err.response.data.error
+                console.log(serverError)
+                if (statusCode === 404) {
+                    alert(`failed to fetch your bookings ${serverError}`)
+                } else if (statusCode===500) {
+                    alert(`failed to fetch your bookings ${serverError}`)
+                } else {
+                    alert("Server Error: Please try again later.");
+                }
+            } else {
+                alert("Could not connect to the server.");
+            }
         }
-        setAllBookings(response.data.message);//it will be an empty array if no bookings
+        
     }
     const handleAttendance = async () => {
-        if (!attendanceBookingCode) return;
-        const response = await axios.post(`http://localhost:5000/events/${attendanceBookingCode}/attendance`);
-        // console.log(response);
-        if (response.data.status === 'success') {
-            setAttendanceResult(response.data.message)
+        // if (!attendanceBookingCode) return;
+        try {
+            const response = await axios.post(`http://localhost:5000/events/${attendanceBookingCode}/attendance`);
+            // console.log(response);
+            if (response.data.status === 'success') {
+                setAttendanceResult(response.data.message)
+            }
+        } catch(err) {
+            if (err.response) {
+
+                console.log(err.response)
+                const statusCode = err.response.status;
+                const serverError = err.response.data.error
+                if (statusCode === 404) {
+                    alert(`failed to handleAttendance ${serverError}`)
+                } else if (statusCode === 500) {
+                    alert(`failed to handleAttendance ${serverError}`)
+                } else {
+                    alert("Server Error: Please try again later.");
+                }
+            } else {
+                alert("Could not connect to the server.");
+            }
         }
+        
     }
     return (<>
     <div className="container">
@@ -118,7 +203,7 @@ function Booking() {
                         <input type="number" name="tickets_count" placeholder="Number of tickets" onChange={handleChange} value={form.tickets_count} required />
                         <button type="submit">Book</button>
                     </form>
-                    {bookingCode && (<input type="text" value={bookingCode}/>)}
+                    {bookingCode && (<input type="text" value={bookingCode} readOnly/>)}
                     
             </div>
 
@@ -130,11 +215,11 @@ function Booking() {
                         {allBookings.length > 0 && (
                             <div className="events-list">
                                 {allBookings.map((eachBooking) => {
-                                    const date = formatToLocal(eachBooking.date);
+                                    const date = formatToLocal(eachBooking.event_date);
                                     return (<div key={eachBooking.id} className="card">
-                                        <h3>{eachBooking.event_name}</h3>
-                                        <p>{new Date(eachBooking.date).toLocaleString()}</p>
-                                        <p>{eachBooking.tickets_count}</p>  
+                                        <h4>{eachBooking.event_name}</h4>
+                                        <p>date & time:{new Date(eachBooking.event_date).toLocaleString()}</p>
+                                        <p>Tickets count:{eachBooking.tickets_count}</p>  
                                         {/* <button onClick={() => handleBooking(event.id)}>Book</button> */}
                                     </div>)
                                 })}
@@ -163,9 +248,9 @@ function Booking() {
                     {users.length > 0 && (
                         <div className="events-list">
                             {users.map((eachUser) => {
-                                return (<div key={eachUser.id} className="card">
-                                    <h3>{eachUser.name}</h3>
-                                    <p>{eachUser.id}</p>
+                                return (<div key={eachUser.id} className="eachUserIdDiv">
+                                    <span>{eachUser.name}</span>
+                                    <span>{eachUser.id}</span>
                                 </div>)
                             })}
                         </div>
