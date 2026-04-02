@@ -122,3 +122,18 @@ This project demonstrates:
 - Database transaction handling
 - Full-stack integration
 
+## API Documentation
+Swagger UI available at:
+https://bookingsystem-uy7w.onrender.com/api-docs/
+
+## Postman Collection
+Import the following file into Postman to test APIs:
+bookingSystem.postman_collection.json
+
+## Database Schema
+The database schema is provided in the following file:
+single_file_backup.sql
+
+## Live
+Frontend: https://eventbukingsystem.netlify.app/
+Backend: https://bookingsystem-uy7w.onrender.com

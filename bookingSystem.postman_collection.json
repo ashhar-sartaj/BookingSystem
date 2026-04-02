@@ -1,0 +1,285 @@
+{
+  "info": {
+    "_postman_id": "0694571c-0cc8-4ec4-a0fc-0d8c24f52299",
+    "name": "bookingSystem",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53206042",
+    "_collection_link": "https://go.postman.co/collection/53206042-0694571c-0cc8-4ec4-a0fc-0d8c24f52299?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "events",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "pm.variables.set(\"current_date\", new Date().toISOString());"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjZDlmYmQxODY1Y2VhZGZkNGM5NSIsImVtYWlsIjoiYXNoaGFyQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzc0MDIyMjg5fQ.NmNDOurQEVdZonzy8rrm_NfosB5ALsQIMIO9iCeRwp8",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"title\": \"singing concert\",\r\n    \"description\": \"Performance by bad boy-Baadeshah\",\r\n    \"date\": \"2026-05-02T11:00:02.000Z\",\r\n    \"total_capacity\": 50\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/events",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "events"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "events",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjZDlmYmQxODY1Y2VhZGZkNGM5NSIsImVtYWlsIjoiYXNoaGFyQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzc0MDIyMjg5fQ.NmNDOurQEVdZonzy8rrm_NfosB5ALsQIMIO9iCeRwp8",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"title\": \"orchestra\",\r\n    \"description\": \"Performamnce of various Ragas\",\r\n    \"date\": \"2026-05-01T11:00:02.000Z\",\r\n    \"total_capacity\": 35\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/events",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "events"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "createUser",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjZDlmYmQxODY1Y2VhZGZkNGM5NSIsImVtYWlsIjoiYXNoaGFyQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzc0MDIyMjg5fQ.NmNDOurQEVdZonzy8rrm_NfosB5ALsQIMIO9iCeRwp8",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"Ashhar\",\r\n    \"email\": \"ashhar@gmail.com\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/createUser",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "createUser"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "bookings",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"user_id\": 30004,\r\n    \"event_id\":240001,\r\n    \"tickets_count\":10\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/bookings",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "bookings"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "bookings",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "http://localhost:5000/users/30004/bookings",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "users",
+            "30004",
+            "bookings"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "attendance",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"user_id\": 1,\r\n    \"event_id\":30001,\r\n    \"tickets_count\": 3\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/events/2d22848a-52c4-454b-b1a5-fdb45ac4473d/attendance",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "events",
+            "2d22848a-52c4-454b-b1a5-fdb45ac4473d",
+            "attendance"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "test database",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/testDb",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "testDb"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "event details by event_id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/events/240001/details",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "events",
+            "240001",
+            "details"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "fetchusers",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/users",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
