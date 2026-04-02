@@ -1,0 +1,41 @@
+# Node modules
+
+node_modules/
+
+# Environment variables
+
+.env
+
+# Logs
+
+logs/
+*.log
+npm-debug.log*
+
+# Build files
+
+dist/
+build/
+
+# OS files
+
+.DS_Store
+Thumbs.db
+
+# IDE files
+
+.vscode/
+.idea/
+
+# Frontend specific
+
+frontend/node_modules/
+frontend/dist/
+
+# Backend specific
+
+backend/node_modules/
+
+# Misc
+
+*.swp

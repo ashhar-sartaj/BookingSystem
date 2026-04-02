@@ -1,0 +1,161 @@
+openapi: 3.0.0
+info:
+  title: Mini Event Management API
+  version: 1.0.0
+  description: API for managing events, bookings, and attendance
+
+servers:
+  - url: http://localhost:5000
+paths:
+  /createUser:
+    post:
+      summary: Create a new user
+      tags: [Users]
+      responses:
+        201:
+          description: User created successfully
+        400:
+          description: Missing required fields
+        409:
+          description: Email already in use
+        500:
+          description: Internal server error
+  /users:
+    get:
+      summary: fetch all the users to display userId for querying bookings by userid
+      tags: [Users]
+      responses:
+        200:
+          description: all users are fetched successfully
+        500:
+          description: Internal server error
+
+  /events:
+    get:
+      summary: Get all upcoming events
+      tags: [Events]
+      responses:
+        200:
+          description: List of upcoming events
+        500:
+          description: Internal server error
+
+    post:
+      summary: Create a new event
+      tags: [Events]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title, description, date, total_capacity]
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                date:
+                  type: string
+                  format: date-time
+                total_capacity:
+                  type: integer
+      responses:
+        201:
+          description: Event created
+        400:
+          description: Missing fields
+        500:
+          description: Internal server error
+
+  /bookings:
+    post:
+      summary: Book tickets for an event
+      tags: [Bookings]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [user_id, event_id, tickets_count]
+              properties:
+                user_id:
+                  type: integer
+                event_id:
+                  type: integer
+                tickets_count:
+                  type: integer
+      responses:
+        201:
+          description: Booking successful
+        400:
+          description: Invalid request/input/invalid ticket counts
+        404:
+          description: User not exist/found
+        500:
+          description: Internal server error
+
+  /users/{id}/bookings:
+    get:
+      summary: Get bookings of a user based on its id
+      tags: [Bookings]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: List of bookings
+        404:
+          description: User not found
+        500:
+          description: Internal server error
+
+  /events/{id}/attendance:
+    post:
+      summary: Mark attendance using booking code
+      tags: [Attendance]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [booking_code]
+              properties:
+                booking_code:
+                  type: string
+      responses:
+        200:
+          description: Attendance marked or returned the count of tickets
+        404:
+          description: unique code not found
+        500:
+          description: Internal server error
+
+  /events/{id}/details:
+    get:
+      summary: Get event details by event ID
+      tags: [Events]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Event details fetched successfully
+        404:
+          description: No event exists with provided id or null
+        500:
+          description: Internal server error

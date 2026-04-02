@@ -1,0 +1,196 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* BODY */
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f5f7fa;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* CONTAINER */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* HEADINGS */
+h1,
+h2,
+h3 {
+  margin-bottom: 15px;
+  color: #222;
+}
+
+/* BUTTONS */
+button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+/* INPUTS */
+input,
+select {
+  padding: 10px;
+  margin: 8px 0;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* CARD */
+.card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 20px;
+}
+
+/* FLEX UTILITIES */
+.flex {
+  display: flex;
+  gap: 10px;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* GRID (for events) */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+/* NAVBAR */
+.navbar {
+  background: #222;
+  color: #fff;
+  padding: 15px 20px;
+}
+
+.navbar h2 {
+  color: white;
+}
+
+/* LINKS */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ERROR / SUCCESS */
+.error {
+  color: red;
+  margin-top: 10px;
+}
+
+.success {
+  color: green;
+  margin-top: 10px;
+}
+
+/* landing page  */
+/* LAYOUT */
+.layout {
+  display: flex;
+  gap: 20px;
+  height: 85vh;
+}
+
+/* LEFT (60%) */
+.left-section {
+  flex: 6;
+  display: flex;
+  flex-direction: column;
+}
+
+/* RIGHT (40%) */
+.right-section {
+  flex: 4;
+  overflow-y: auto;
+}
+
+/* FORM */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* EVENT LIST */
+.events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* OPTIONAL: scrollbar nice look */
+.right-section::-webkit-scrollbar {
+  width: 6px;
+}
+
+.right-section::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+/* BOOKING PAGE LAYOUT */
+.booking-layout {
+  display: flex;
+  gap: 20px;
+  height: 85vh;
+}
+
+/* LEFT */
+.booking-left {
+  flex: 6;
+}
+
+/* RIGHT */
+.booking-right {
+  flex: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* LOOKUP (TOP 70%) */
+.lookup {
+  flex: 7;
+  overflow-y: auto;
+}
+
+/* ATTENDANCE (BOTTOM 30%) */
+.attendance {
+  flex: 3;
+}
+
+/* RESULT BOX */
+.result {
+  margin-top: 10px;
+  background: #f0f4f8;
+  padding: 10px;
+  border-radius: 6px;
+}
