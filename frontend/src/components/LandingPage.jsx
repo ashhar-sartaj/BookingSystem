@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import { api } from "../api/axios.js";
 function LandingPage() {
 
     const [events, setEvents] = useState([]);
@@ -18,7 +18,7 @@ function LandingPage() {
     // Fetch events
     const fetchEvents = async () => {
         try {
-            const res = await axios.get("http://localhost:5000/events");
+            const res = await api.get("/events");
             console.log(res); //this is [] if no upcoming events
             if (res.data.message.length==0) {
                 setMessage('No upcoming events')
@@ -75,7 +75,7 @@ function LandingPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:5000/events", form);
+            const response = await api.post("/events", form);
             if (response.data.status === 'success') {
                 alert("Event created ");
             }

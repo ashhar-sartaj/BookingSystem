@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom"
 import axios from "axios";
+import { api } from "../api/axios.js";
 import { useEffect } from "react";
 function Booking() {
     const [searchParams] = useSearchParams();
@@ -35,7 +36,7 @@ function Booking() {
         if (!form.event_id) return;
         const fetchEventDetails = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/events/${eventIdFromParams}/details`)
+                const response = await api.get(`/events/${eventIdFromParams}/details`)
                 console.log(response)
                 const apiDate = response.data.message.date;
                 console.log(apiDate)
@@ -68,7 +69,7 @@ function Booking() {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/users`)
+                const response = await api.get(`/users`)
                 if (response.data.message.length !== 0) {
                     setUsers(response.data.message)
                 }
@@ -100,7 +101,7 @@ function Booking() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5000/bookings', form); //will get the booking code
+            const response = await api.post('/bookings', form); //will get the booking code
             console.log(response.data.message);
             if (response.data.status === 'success') {
                 alert("Booking created");
@@ -137,7 +138,7 @@ function Booking() {
     const checkMyBookings = async () => {
         // if (!userId) return;
         try {
-            const response = await axios.get(`http://localhost:5000/users/${userId}/bookings`);
+            const response = await api.get(`/users/${userId}/bookings`);
             console.log('your bookings', response)
             if (response.data.message.length === 0) {
                 setMessage('No bookings')
@@ -165,7 +166,7 @@ function Booking() {
     const handleAttendance = async () => {
         // if (!attendanceBookingCode) return;
         try {
-            const response = await axios.post(`http://localhost:5000/events/${attendanceBookingCode}/attendance`);
+            const response = await api.post(`/events/${attendanceBookingCode}/attendance`);
             // console.log(response);
             if (response.data.status === 'success') {
                 setAttendanceResult(response.data.message)
