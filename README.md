@@ -84,7 +84,7 @@ npm run dev
 ```
 ---
 
-## 📌 API Endpoints
+## API Endpoints
 
 | Method | Endpoint                 | Description             |
 | ------ | ------------------------ | ----------------------- |
@@ -98,14 +98,7 @@ npm run dev
 
 ---
 
-
-```
-http://localhost:3000/api-docs
-```
-
----
-
-## 📈 Future Improvements
+## Future Improvements
 
 - Authentication (JWT)
 - Role-based access (Admin/User)
@@ -135,5 +128,5 @@ The database schema is provided in the following file:
 single_file_backup.sql
 
 ## Live
-Frontend: https://eventbukingsystem.netlify.app/
-Backend: https://bookingsystem-uy7w.onrender.com
+- Frontend: https://eventbukingsystem.netlify.app/
+- Backend: https://bookingsystem-uy7w.onrender.com
