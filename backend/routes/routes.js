@@ -83,6 +83,7 @@ router.post('/bookings', async (req, res) => {
         return res.status(201).json({ status: 'success', message: bookingCode });
     } catch (err) {
         // errors thrown by the controller
+        console.log(err)
         if (err.message === 'No such event exist') {
             return res.status(404).json({ status: 'failed', error: err.message });
         }

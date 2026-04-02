@@ -1,26 +1,34 @@
 import { useState } from "react";
-import { useSearchParams } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import axios from "axios";
+import { Navigate } from "react-router-dom";
 import { api } from "../api/axios.js";
 import { useEffect } from "react";
 function Booking() {
+    const [userId, setUserId] = useState('');
+    const [allBookings, setAllBookings ] = useState([])
+    const [bookingCode, setBookingCode] = useState('');
+    const [attendanceBookingCode, setAttendanceBookingCode] = useState('')
+    const [attendanceResult, setAttendanceResult] = useState('')
+    const [users, setUsers] = useState([])
+    const [eventDetails, setEventDetails] = useState({})
+    const navigate = useNavigate();
+    //fetching eventId from params
     const [searchParams] = useSearchParams();
     // console.log(searchParams) //URLSearchParams {size: 1}
     const eventIdFromParams = searchParams.get("eventId");
     console.log(eventIdFromParams);
+    // setEventId(eventIdFromParams);
+
     const [form, setForm] = useState({
         user_id: "",
         event_id: eventIdFromParams,
         date: "",
         tickets_count: ""
     })
-    const [userId, setUserId] = useState('');
-    const [allBookings, setAllBookings ] = useState([])
-    const [message, setMessage] = useState('');
-    const [bookingCode, setBookingCode] = useState('');
-    const [attendanceBookingCode, setAttendanceBookingCode] = useState('')
-    const [attendanceResult, setAttendanceResult] = useState('')
-    const [users, setUsers] = useState([])
+
+    
+   
     //helper function to format the date backn to the local input. Will accept the utcstring..a dnconvert.
     const formatToLocal = (utcdatestring) =>{
         if (!utcdatestring) return "";
@@ -33,15 +41,16 @@ function Booking() {
     }
     //using the  eventId make a db call and et all the details if the event.. and then set the date from it to this form.
     useEffect(() => {
-        if (!form.event_id) return;
         const fetchEventDetails = async () => {
             try {
                 const response = await api.get(`/events/${eventIdFromParams}/details`)
                 console.log(response)
+                setEventDetails(response.data.message);
                 const apiDate = response.data.message.date;
                 console.log(apiDate)
                 // 2. Format it to the local: using the helper function
                 const formattedDate = formatToLocal(apiDate)
+                // setDate(formattedDate);
                 setForm({
                     ...form,
                     date: formattedDate
@@ -61,10 +70,9 @@ function Booking() {
                     alert("Could not connect to the server.");
                 }
             }
-            
         }
         fetchEventDetails()
-    }, [form.event_id])
+    }, [])
     //useeffect to fetch all the avilable users to show their userIds
     useEffect(() => {
         const fetchUsers = async () => {
@@ -112,13 +120,13 @@ function Booking() {
             //check if the error.response exist or not
             if (err.response) {
                 //get the status code
-                console.log(err.response)
+                console.log(err.response.data)
                 const statusCode = err.response.status;
-                // const serverError = err.response.data.error; //will be our string from the backend error
+                const serverError = err.response.data.error; //will be our string from the backend error
                 if (statusCode === 400) {
-                    alert('Invalid request/input/invalid ticket counts')
+                    alert(`failed to create booking ${serverError}`)
                 } else if(statusCode === 404) {
-                    alert('User not exist/found')
+                    alert(`failed to create booking ${serverError}`)
                 } else {
                     alert("Server Error: Please try again later.");
                 }
@@ -126,14 +134,13 @@ function Booking() {
                 //case if the request hasnt been made to the server
                 alert("Could not connect to the server.");
             }
-            
         }
         setForm({
+            ...form,
             user_id: "",
-            event_id:"",
-            date: "",
             tickets_count: ""
         })
+        
     }
     const checkMyBookings = async () => {
         // if (!userId) return;
@@ -148,7 +155,7 @@ function Booking() {
             if (err.response) {
                 console.log(err.response)
                 const statusCode=err.response.status;
-                const serverError=err.response.data.error
+                const serverError=err.response.data.error;
                 console.log(serverError)
                 if (statusCode === 404) {
                     alert(`failed to fetch your bookings ${serverError}`)
@@ -190,20 +197,41 @@ function Booking() {
         }
         
     }
+    const handleBackClick = () => {
+        navigate('/')
+    }
     return (<>
     <div className="container">
         <div className="booking-layout">
             <div className="booking-left card">
                     <h2>Book Tickets</h2>
-                    <form onSubmit={handleSubmit} className="form">
-                        {/* fields required: user_id, event_id, booking_code, tickets_count, booking_date */}
-                        {/* userid can be automatically filed: implement later on  */}
-                        <input type="number" name="user_id" placeholder="User ID" onChange={handleChange} value={form.user_id}/>
-                        <input type="number" name="event_id" placeholder="Event ID" readOnly value={form.event_id} />
-                        <input type="datetime-local" name="date" readOnly value={form.date} required />
-                        <input type="number" name="tickets_count" placeholder="Number of tickets" onChange={handleChange} value={form.tickets_count} required />
-                        <button type="submit">Book</button>
-                    </form>
+                    {Object.keys(eventDetails).length > 0 && (
+                        <>
+                            <h3>{eventDetails.title}</h3>
+                            <p>{eventDetails.description}</p>
+                            <form onSubmit={handleSubmit} className="form">
+                                {/* fields required: user_id, event_id, booking_code, tickets_count, booking_date */}
+                                {/* userid can be automatically filed: implement later on  */}
+                                <input type="number" name="user_id" placeholder="User ID" onChange={handleChange} value={form.user_id} />
+                                <input type="number" name="event_id" placeholder="Event ID" readOnly value={form.event_id} />
+                                <input type="datetime-local" name="date" readOnly value={form.date} required />
+                                <input type="number" name="tickets_count" placeholder="Number of tickets" onChange={handleChange} value={form.tickets_count} required />
+                                <button type="submit">Book</button>
+                            </form>
+                            <div>
+                                <span>Total ticket </span>
+                                <span>{eventDetails.total_capacity}</span>
+                            </div>
+                            <div>
+                                <span>Remaining tickets </span>
+                                <span>{eventDetails.remaining_tickets}</span>
+                            </div>
+                            
+
+                        </>
+                    )}
+                    
+                   
                     {bookingCode && (<input type="text" value={bookingCode} readOnly/>)}
                     
             </div>
@@ -217,16 +245,15 @@ function Booking() {
                             <div className="events-list">
                                 {allBookings.map((eachBooking) => {
                                     const date = formatToLocal(eachBooking.event_date);
-                                    return (<div key={eachBooking.id} className="card">
+                                    return (<div key={eachBooking.id} className="eachBookingDiv">
                                         <h4>{eachBooking.event_name}</h4>
-                                        <p>date & time:{new Date(eachBooking.event_date).toLocaleString()}</p>
+                                        <p>{new Date(eachBooking.event_date).toLocaleString()}</p>
                                         <p>Tickets count:{eachBooking.tickets_count}</p>  
                                         {/* <button onClick={() => handleBooking(event.id)}>Book</button> */}
                                     </div>)
                                 })}
                             </div>
                         )}
-                        {message && {message}}
                 </div>
             </div>
 
@@ -258,6 +285,7 @@ function Booking() {
                     )}
                 </div>
         </div>
+            <button className="backToEventsBtn" onClick={handleBackClick}>Back to events??</button>
     </div>
     </>)
 }

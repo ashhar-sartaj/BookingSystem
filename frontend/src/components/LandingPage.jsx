@@ -17,9 +17,11 @@ function LandingPage() {
 
     // Fetch events
     const fetchEvents = async () => {
+        // console.log('fetchevent runned')
         try {
             const res = await api.get("/events");
-            console.log(res); //this is [] if no upcoming events
+            // console.log('/events ')
+            // console.log(res); //this is [] if no upcoming events
             if (res.data.message.length==0) {
                 setMessage('No upcoming events')
             }
@@ -89,6 +91,9 @@ function LandingPage() {
             });
         } catch (err) {
             // console.error(err);
+            if (err.message === 'Database operation failed to insert row.') {
+                alert("Failed event creation. Reason: Db");
+            }
             if (err.response) {
                 const statusCode = err.response.status;
                 const serverError = err.response.data.error;
