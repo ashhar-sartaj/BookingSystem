@@ -1,5 +1,5 @@
 # Event Management System
-An application where users can create events, book tickets, and manage attendance.
+An application where users can create events, book tickets, and manage.
 ---
 ## Features
 - Create and manage events
@@ -8,7 +8,7 @@ An application where users can create events, book tickets, and manage attendanc
 -  Generate unique booking codes
 -  Retrieve user bookings
 -  Mark attendance using booking codes
--  API documentation using Swagger (OpenAPI)
+-  API documentation using Swagger
 ---
 ## Tech Stack
 ### Backend
@@ -69,7 +69,7 @@ DB_HOST=your_host
 DB_USER=your_user
 DB_PASSWORD=your_password
 DB_NAME=your_database
-PORT=3000
+PORT=your_db_port
 ```
 Start backend:
 ```
